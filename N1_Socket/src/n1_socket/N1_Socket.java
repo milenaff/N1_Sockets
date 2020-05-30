@@ -31,6 +31,12 @@ public class N1_Socket {
         while(true){
             System.out.println("Waiting for the client request");
             try (Socket socket = server.accept()) {
+                
+                //instancia Gerenciador
+                GerenciadorFilaRequisicoes.getInstancia();
+                
+                
+                //pegar a requisição                                         
                 try (InputStream stream = socket.getInputStream()) {        
                     boolean ativo = true;
                     while (ativo)
@@ -40,17 +46,34 @@ public class N1_Socket {
                             byte[] dados = new byte[stream.available()];
                             stream.read(dados);
                             String dadosLidos = new String(dados);
-                            if (dadosLidos.equals("sair"))
+                            int requisicao;
+                            if(tryParseInt(dadosLidos)){
+                                requisicao = Integer.parseInt(dadosLidos);
+                                //Instancia a Thread
                                 ativo = false;
-                            else
-                                System.out.println("Message Received: " + new String(dados));
+                            }
+                          
                         }
                         Thread.sleep(10);
                     }
                     System.out.println("Bye bye");
                 }
+                
+                
+                
+                
             }
         }
     }
     
+    private static boolean tryParseInt(String value) {
+        try {
+            Integer.parseInt(value);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
 }
+
