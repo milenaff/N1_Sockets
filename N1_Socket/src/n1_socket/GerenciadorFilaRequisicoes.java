@@ -67,5 +67,25 @@ public class GerenciadorFilaRequisicoes {
             FilaRequisicoes4.remove();
         }
     }
+    
+    public int Verifica_Impressora_Vazia() {
+
+        int[] Vetor_impressoras = new int[5];
+        Vetor_impressoras[0] = FilaRequisicoes1.size();
+        Vetor_impressoras[1] = FilaRequisicoes2.size();
+        Vetor_impressoras[2] = FilaRequisicoes3.size();
+        Vetor_impressoras[3] = FilaRequisicoes4.size();
+        int menor = Vetor_impressoras[0];
+        int retorno = 0;
+        for (int i = 0; i < 4; i++) {
+            if (Vetor_impressoras[i] < menor) {
+                menor = Vetor_impressoras[i];
+                retorno = i;
+            }
+
+        }
+        return retorno +1;
+
+    }
 
 }

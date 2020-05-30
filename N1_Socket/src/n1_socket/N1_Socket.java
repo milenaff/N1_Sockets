@@ -25,55 +25,71 @@ public class N1_Socket {
      */
     public static void main(String[] args) throws IOException, InterruptedException {
         // TODO code application logic here
-        
-        
-         server = new ServerSocket(port);
-        while(true){
+        //instancia Gerenciador
+        GerenciadorFilaRequisicoes.getInstancia();
+        ThreadImpressora thread = new ThreadImpressora();
+        thread.start();
+
+        server = new ServerSocket(port);
+        while (true) {
+
             System.out.println("Waiting for the client request");
             try (Socket socket = server.accept()) {
-                
-                //instancia Gerenciador
-                GerenciadorFilaRequisicoes.getInstancia();
-                
-                
+
                 //pegar a requisição                                         
-                try (InputStream stream = socket.getInputStream()) {        
+                try (InputStream stream = socket.getInputStream()) {
                     boolean ativo = true;
-                    while (ativo)
-                    {
-                        if (stream.available() != 0)
-                        {
+                    while (ativo) {
+                        if (stream.available() != 0) {
                             byte[] dados = new byte[stream.available()];
                             stream.read(dados);
                             String dadosLidos = new String(dados);
-                            int requisicao;
-                            if(tryParseInt(dadosLidos)){
-                                requisicao = Integer.parseInt(dadosLidos);
-                                //Instancia a Thread
-                                ativo = false;
-                            }
-                          
+                            Pega_Requisicao(dadosLidos);
+
+//                            //Instancia a Thread
+//                            ativo = false;
+
                         }
                         Thread.sleep(10);
                     }
                     System.out.println("Bye bye");
+                    
                 }
-                
-                
-                
-                
+
             }
         }
+     
+      
     }
     
-    private static boolean tryParseInt(String value) {
-        try {
-            Integer.parseInt(value);
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
+    public static void Pega_Requisicao(String mensagem) {
+
+        int impressora = GerenciadorFilaRequisicoes.getInstancia().Verifica_Impressora_Vazia();
+
+        switch (impressora) {
+
+            case 1: {
+                GerenciadorFilaRequisicoes.getInstancia().Adiciona_Requisicao_1(mensagem);
+                break;
+            }
+            case 2: {
+                GerenciadorFilaRequisicoes.getInstancia().Adiciona_Requisicao_2(mensagem);
+                break;
+            }
+            case 3: {
+                GerenciadorFilaRequisicoes.getInstancia().Adiciona_Requisicao_3(mensagem);
+                break;
+            }
+            case 4: {
+                GerenciadorFilaRequisicoes.getInstancia().Adiciona_Requisicao_4(mensagem);
+                break;
+            }
+
         }
+
     }
+    
+    
 
 }
 

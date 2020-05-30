@@ -15,31 +15,31 @@ import java.util.logging.Logger;
 public class ThreadImpressora extends Thread {
     
     @Override
-    public void run() {                
-            ///fazer alguma coisa
-
-    }
-    
-    public String Retorna_Impressora(int numero_impressora) {
-
-        switch (numero_impressora) {
-
-            case 1: {
-                return "Impressora 1";
+    public void run() {
+        ///fazer alguma coisa
+        while (true) {
+            if (!GerenciadorFilaRequisicoes.getInstancia().FilaRequisicoes1.isEmpty()) {
+                System.out.println(GerenciadorFilaRequisicoes.getInstancia().FilaRequisicoes1.poll() + " Impressora 1");
             }
-            case 2: {
-                return "Impressora 2";
+            if (!GerenciadorFilaRequisicoes.getInstancia().FilaRequisicoes2.isEmpty()) {
+                System.out.println(GerenciadorFilaRequisicoes.getInstancia().FilaRequisicoes2.poll() + " Impressora 2");
             }
-            case 3: {
-                return "Impressora 3";
+            if (!GerenciadorFilaRequisicoes.getInstancia().FilaRequisicoes3.isEmpty()) {
+                System.out.println(GerenciadorFilaRequisicoes.getInstancia().FilaRequisicoes3.poll() + " Impressora 3");
             }
-            case 4: {
-                return "Impressora 4";
+            if (!GerenciadorFilaRequisicoes.getInstancia().FilaRequisicoes4.isEmpty()) {
+                System.out.println(GerenciadorFilaRequisicoes.getInstancia().FilaRequisicoes4.poll() + " Impressora 4");
+            }
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(ThreadImpressora.class.getName()).log(Level.SEVERE, null, ex);
             }
 
         }
-        return "";
 
     }
+    
+  
     
 }
