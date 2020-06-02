@@ -16,12 +16,22 @@ public class N1_Socket {
         GerenciadorFilaRequisicoes.getInstancia();
         GerenciadorFilaRequisicoes.getInstancia().Intancia_Servidor();        
         ThreadImpressora thread = new ThreadImpressora();
-        thread.start();        
-        
+        thread.start(); 
+        ServerSocket server = GerenciadorFilaRequisicoes.getInstancia().getServe();        
         System.out.println("Waiting for the client request");
+        
+        
+        while (true) {
+
+            ThreadRequisicao thread_requisicao = new ThreadRequisicao();
+            thread_requisicao.start();
+            Thread.sleep(10);
+        }
+             
+        
                      
-        ThreadRequisicao thread_requisicao = new ThreadRequisicao();
-        thread_requisicao.start(); 
+        
+       
                 
     }    
     public static void Pega_Requisicao(String mensagem) {

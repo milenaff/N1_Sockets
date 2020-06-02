@@ -10,15 +10,14 @@ import java.util.logging.Logger;
 import static n1_socket.N1_Socket.Pega_Requisicao;
 
 public class ThreadRequisicao extends Thread {
+    
      ServerSocket server = GerenciadorFilaRequisicoes.getInstancia().getServe();
     
       @Override
     public void run() {
 
-        Socket socket = null;
-        try {
-            socket = server.accept();
-            //pegar a requisição                                         
+        try (Socket socket = server.accept()) {
+
             try (InputStream stream = socket.getInputStream()) {
                 boolean ativo = true;
                 while (ativo) {
@@ -28,23 +27,17 @@ public class ThreadRequisicao extends Thread {
                         String dadosLidos = new String(dados);
                         Pega_Requisicao(dadosLidos);
                         //ativo = false;
-                    }           
+                    }
                 }
-          
 
             }
         } catch (IOException ex) {
             Logger.getLogger(ThreadRequisicao.class.getName()).log(Level.SEVERE, null, ex);
         }
-//        finally{
-//            try {
-//                socket.close();
-//            } catch (IOException ex) {
-//                Logger.getLogger(ThreadRequisicao.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-        
-        }
 
     }
+
+
+}
 
 
