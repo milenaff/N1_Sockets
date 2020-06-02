@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package n1_socket;
 
 import java.io.IOException;
@@ -13,10 +9,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import static n1_socket.N1_Socket.Pega_Requisicao;
 
-/**
- *
- * @author italo
- */
 public class ThreadRequisicao extends Thread {
      ServerSocket server = GerenciadorFilaRequisicoes.getInstancia().getServe();
     
@@ -35,7 +27,7 @@ public class ThreadRequisicao extends Thread {
                         stream.read(dados);
                         String dadosLidos = new String(dados);
                         Pega_Requisicao(dadosLidos);
-                        ativo = false;
+                        //ativo = false;
                     }           
                 }
           
@@ -44,15 +36,15 @@ public class ThreadRequisicao extends Thread {
         } catch (IOException ex) {
             Logger.getLogger(ThreadRequisicao.class.getName()).log(Level.SEVERE, null, ex);
         }
-        finally{
-            try {
-                socket.close();
-            } catch (IOException ex) {
-                Logger.getLogger(ThreadRequisicao.class.getName()).log(Level.SEVERE, null, ex);
-            }
+//        finally{
+//            try {
+//                socket.close();
+//            } catch (IOException ex) {
+//                Logger.getLogger(ThreadRequisicao.class.getName()).log(Level.SEVERE, null, ex);
+//            }
         
         }
 
     }
 
-}
+
