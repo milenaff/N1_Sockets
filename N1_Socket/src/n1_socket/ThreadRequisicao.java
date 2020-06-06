@@ -5,37 +5,68 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import static n1_socket.N1_Socket.Pega_Requisicao;
 
 public class ThreadRequisicao extends Thread {
     
-     ServerSocket server = GerenciadorFilaRequisicoes.getInstancia().getServe();
-    
-      @Override
+    private boolean ServidorAtivo;
+    private static ServerSocket server;
+    private static int port = 9879;
+     private List<Client> clientesConectados = Collections.synchronizedList(new ArrayList<Client>());
+
+    @Override
     public void run() {
 
-        try (Socket socket = server.accept()) {
-
-            try (InputStream stream = socket.getInputStream()) {
-                boolean ativo = true;
-                while (ativo) {
-                    if (stream.available() != 0) {
-                        byte[] dados = new byte[stream.available()];
-                        stream.read(dados);
-                        String dadosLidos = new String(dados);
-                        Pega_Requisicao(dadosLidos);
-                        //ativo = false;
-                    }
-                }
-
+        try {
+            ServidorAtivo = true;
+            server = new ServerSocket(port);
+            while (ServidorAtivo) {
+                Socket socket = server.accept();
+                adicionaClient(socket);
+                Thread.sleep(10);
             }
-        } catch (IOException ex) {
-            Logger.getLogger(ThreadRequisicao.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException | InterruptedException ex) {
+            if (ex.getMessage().equals("socket closed")) {
+                System.out.println("Conexão server encerrada...");
+            } else {
+                Logger.getLogger(ThreadRequisicao.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
     }
+
+
+    private void adicionaClient(Socket socket) {
+        Client manager = new Client();
+        manager.setClientSocket(socket);
+        clientesConectados.add(manager);
+        Thread threadSocket = new Thread(manager);
+        threadSocket.start();
+    }
+
+    public void listarClientes() {
+        for (Client cliente : clientesConectados) {
+            cliente.identifiqueSe();
+        }
+    }
+    
+    public void encerra() throws IOException {
+        clientesConectados.forEach((cliente) -> {
+            try {
+                cliente.encerra();
+            } catch (IOException ex) {
+                Logger.getLogger(ThreadRequisicao.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+        ServidorAtivo = false;
+        server.close();
+    }
+
 
 
 }

@@ -17,10 +17,8 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class GerenciadorFilaRequisicoes {
 
     private static Object objeto = new Object();
-    public static GerenciadorFilaRequisicoes _instance;
-    
-    private static ServerSocket server;
-    private static int port = 9879;
+    public static GerenciadorFilaRequisicoes _instance;    
+
 
     public static GerenciadorFilaRequisicoes getInstancia() {
         if (_instance == null) {
@@ -39,18 +37,5 @@ public class GerenciadorFilaRequisicoes {
         if (!FilaRequisicoes1.isEmpty()) {
             FilaRequisicoes1.remove();
         }
-    }    
-
-    
-    public ServerSocket getServe() {
-        return server;
-
-    }
-    
-    public void Intancia_Servidor() throws IOException{
-        if(server == null)
-            server = new ServerSocket(port);
-    }
-
-
+    } 
 }
